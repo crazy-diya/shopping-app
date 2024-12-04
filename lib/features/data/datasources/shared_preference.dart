@@ -3,6 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String uID = 'UID';
 const String token = 'TOKEN';
 const String email = 'EMAIL';
+const String name = 'NAME';
+const String image = 'IMAGE';
+
 
 class AppSharedData {
   late SharedPreferences secureStorage;

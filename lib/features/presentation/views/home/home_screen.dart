@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shopingapp/core/services/dependency_injection.dart';
+import 'package:shopingapp/features/data/datasources/shared_preference.dart';
 import 'package:shopingapp/features/data/model/response/items_response_model.dart';
 import 'package:shopingapp/features/presentation/bloc/home/home_cubit.dart';
 import 'package:shopingapp/utils/app_colors.dart';
@@ -18,6 +19,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final _bloc = injection.call<HomeCubit>();
+  final _appShared = injection.call<AppSharedData>();
 
   List<ItemsResponseModel>? items;
 
@@ -41,7 +43,6 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        backgroundColor: Colors.white,
         titleSpacing: 0,
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -59,6 +60,18 @@ class _HomeViewState extends State<HomeView> {
             padding: const EdgeInsets.only(right: 16.0),
             child: Row(
               children: [
+                InkWell(
+                  child: const Icon(
+                    Icons.history,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.kMyOrdersScreen);
+                  },
+                ),
+                SizedBox(
+                  width: 4.w,
+                ),
                 Stack(
                   alignment: Alignment.topRight,
                   children: [
@@ -114,16 +127,14 @@ class _HomeViewState extends State<HomeView> {
                       ),
                   ],
                 ),
-                const SizedBox(
-                  width: 8,
+                SizedBox(
+                  width: 4.w,
                 ),
                 InkWell(
-                  child: Container(
+                  child: SizedBox(
                     height: 45,
                     width: 45,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white),
+                    child: Image.network(_appShared.getData(image)),
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, Routes.kUserProfileView);
@@ -202,6 +213,12 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  "Rs. ${items![index].price}",
+                                  style: const TextStyle(
+                                      color: AppColors.addColorRed),
+                                )
                               ],
                             ),
                           ),

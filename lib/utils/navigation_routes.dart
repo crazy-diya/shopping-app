@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shopingapp/features/presentation/views/home/home_screen.dart';
 import 'package:shopingapp/features/presentation/views/shopping_cart/shopping_cart_view.dart';
+import '../features/presentation/views/my_orders/my_orders_screen.dart';
 import '../features/presentation/views/splash/splash_screen.dart';
 import '../features/presentation/views/login/login_screen.dart';
 import '../features/presentation/views/user_profile/user_profile_screen.dart';
@@ -12,6 +13,7 @@ class Routes {
   static const String kUserProfileView = "kUserProfileView";
   static const String kHomeView = "kHomeView";
   static const String kShoppingCartView = "kShoppingCartView";
+  static const String kMyOrdersScreen = "kMyOrdersScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -45,6 +47,12 @@ class Routes {
               shoppingCartArgs: settings.arguments as ShoppingCartArgs),
           type: PageTransitionType.fade,
           settings: const RouteSettings(name: Routes.kShoppingCartView),
+        );
+      case Routes.kMyOrdersScreen:
+        return PageTransition(
+          child: const MyOrdersScreen(),
+          type: PageTransitionType.fade,
+          settings: const RouteSettings(name: Routes.kMyOrdersScreen),
         );
       default:
         return PageTransition(

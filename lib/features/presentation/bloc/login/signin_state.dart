@@ -16,3 +16,10 @@ class ServerFailureState extends SignInState {}
 class ConnectionFailureState extends SignInState {}
 
 class SignInSuccessState extends SignInState {}
+
+class ProfileSuccessState extends SignInState {
+  final UserProfileResponse? userProfileResponse;
+
+  ProfileSuccessState({this.userProfileResponse});
+}
+

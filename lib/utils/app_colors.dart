@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Font Colors
   static const Color colorTransparent = Colors.transparent;
-  static const Color colorPrimary = Color(0xFF94BF7E);
+  static const Color colorPrimary = Color(0xFF63C289);
   static const Color colorSecondary = Color(0xFF3F3939);
   static const Color colorBlack = Color(0xFF000000);
   static const Color appColorAccent = Color(0xFF757575);
@@ -13,6 +13,6 @@ class AppColors {
   static const Color fontColorGray = Color(0xFF545454);
   static const Color buttonColorGreen = Color(0xFF304328);
   static const Color textColorGreen = Color(0xFF94BF7E);
-  static const Color removeColorRed = Color(0xFF800D1E);
+  static const Color removeColorRed = Color(0xFFF80629);
   static const Color addColorRed = Color(0xFF094B04);
 }

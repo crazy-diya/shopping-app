@@ -50,12 +50,81 @@ class APIHelper {
     );
   }
 
-  Future<dynamic> post(T) async {}
+  Future<dynamic> postOnly(String tag, {Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.post(
+        // NetworkConfig.getNetworkConfig() + tag,
+        tag,
+        data: data,
+      );
+      return response.data;
+    } on DioException catch (error) {
+      throw DioExceptionError(
+        errorResponse: ErrorResponseEntity(
+          responseCode: error.response!.statusCode.toString(),
+          responseError: error.message!,
+        ),
+      );
+    }
+  }
+
+  Future<dynamic> putOnly(String tag, {Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.put(
+        // NetworkConfig.getNetworkConfig() + tag,
+        tag,
+        data: data,
+      );
+      return response.data;
+    } on DioException catch (error) {
+      throw DioExceptionError(
+        errorResponse: ErrorResponseEntity(
+          responseCode: error.response!.statusCode.toString(),
+          responseError: error.message!,
+        ),
+      );
+    }
+  }
+
+  Future<dynamic> deleteOnly(String tag, {Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.delete(
+        // NetworkConfig.getNetworkConfig() + tag,
+        tag,
+        data: data,
+      );
+      return response.data;
+    } on DioException catch (error) {
+      throw DioExceptionError(
+        errorResponse: ErrorResponseEntity(
+          responseCode: error.response!.statusCode.toString(),
+          responseError: error.message!,
+        ),
+      );
+    }
+  }
 
   Future<dynamic> get(String tag, {Map<String, dynamic>? param}) async {
     try {
       final response = await dio.get(
         NetworkConfig.getNetworkConfig() + tag,
+        queryParameters: param,
+      );
+      return response.data;
+    } on DioException catch (error) {
+      throw DioExceptionError(
+        errorResponse: ErrorResponseEntity(
+          responseCode: error.response!.statusCode.toString(),
+          responseError: error.message!,
+        ),
+      );
+    }
+  }
+
+  Future<dynamic> getOnly(String tag, {Map<String, dynamic>? param}) async {
+    try {
+      final response = await dio.get(
+        tag,
         queryParameters: param,
       );
       return response.data;

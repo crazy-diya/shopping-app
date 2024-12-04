@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shopingapp/features/data/datasources/shared_preference.dart';
+import 'package:shopingapp/features/data/model/request/user_profile_request_model.dart';
 import 'package:shopingapp/features/domain/entities/sign_in_entity.dart';
 import 'package:shopingapp/features/presentation/bloc/login/signin_cubit.dart';
+import 'package:shopingapp/utils/app_strings.dart';
+import 'package:shopingapp/utils/app_validations.dart';
 import 'package:shopingapp/utils/navigation_routes.dart';
 
 import '../../../../core/services/dependency_injection.dart';
@@ -16,30 +20,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _bloc = injection.call<SignInCubit>();
+  final _appShared = injection.call<AppSharedData>();
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  String? _validateEmail(String? value) {
-    const String pattern = r'^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
-    final RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty) {
-      return 'Please enter an email';
-    } else if (!regex.hasMatch(value)) {
-      return 'Enter a valid email address';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter a password';
-    } else if (value.length < 8) {
-      return 'Password must be at least 8 characters long';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +32,22 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocProvider(
         create: (context) => _bloc,
         child: BlocListener<SignInCubit, SignInState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is SignInSuccessState) {
+              await _bloc.getUserDetails(
+                UserProfileRequest(
+                  uid: _appShared.getData(uID),
+                ),
+              );
+            } else if (state is ProfileSuccessState) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Successfully Login Data')),
+                const SnackBar(content: Text(AppStrings.successLogin)),
               );
               Navigator.pushNamedAndRemoveUntil(
                   context, Routes.kHomeView, (route) => false);
             } else if (state is ApiFailureState) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Fail')),
+                const SnackBar(content: Text('Invalid Email or Password')),
               );
             } else if (state is DioExceptionFailureState) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -64,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               );
             } else if (state is ServerFailureState) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Fail')),
+                const SnackBar(content: Text('Something Went wrong!')),
               );
             }
           },
@@ -92,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: 'Enter your email',
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        validator: _validateEmail,
+                        validator: AppValidations.validateEmail,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -102,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: 'Enter your password',
                         ),
                         obscureText: true,
-                        validator: _validatePassword,
+                        validator: AppValidations.validatePassword,
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
@@ -116,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 password: _passwordController.text));
                           }
                         },
-                        child: const Text('Submit'),
+                        child: const Text('Login'),
                       ),
                     ],
                   ),

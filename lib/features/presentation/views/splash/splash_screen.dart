@@ -21,7 +21,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    _bloc.getSplashData();
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        _bloc.getSplashData();
+      },
+    );
     super.initState();
   }
 
@@ -42,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     AppStrings.welcomeMessage.toUpperCase(),
@@ -51,19 +56,6 @@ class _SplashScreenState extends State<SplashScreen> {
                       color: AppColors.fontColorWhite,
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _bloc.getSplashData();
-                    },
-                    child: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: AppColors.fontColorWhite,
-                      size: 22.sp,
                     ),
                   ),
                 ],
